@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Ocelot IDE Sudo Mod
 // @namespace    http://slensky.com/
-// @version      0.2
+// @version      0.3
 // @description  sorry Arjun :(
 // @author       Stephan Lensky
 // @match        https://www.ocelot-ide.org/
@@ -14,12 +14,22 @@
 
 // Define global configuration for the script here
 var config = {
-    tabSize: 4
+    tabSize: 4,
+    editorWidthPercent: 80
 }
 
 function GM_main(config) {
+    // change the width of the editor
+    async function styleEditorPane(widthPercent) {
+        await document.querySelector(".Index-jumboContent-3 div.Pane.vertical.Pane1") !== null;
+        var pane = document.querySelector(".Index-jumboContent-3 div.Pane.vertical.Pane1");
+        if (pane !== null) {
+            pane.style.width = widthPercent + "%";
+        }
+    }
+
     if (window.monaco === undefined) {
-        console.error('window.monaco is undefined, sudo mod will not run');
+        console.error('window.monaco is undefined, editor-specific parts of sudo mod will not run');
         return;
     }
     var monaco = window.monaco;
@@ -205,6 +215,9 @@ declare function setProperty(object: Object, prop: string, value: any): void;
 
     async function configureEditor(e) {
         await e.model !== undefined && e.model !== null;
+
+        // apply any custom styles to the editor pane
+        styleEditorPane(config.editorWidthPercent);
 
         // set the indentation length (in spaces)
         e.model.updateOptions({tabSize: config.tabSize});

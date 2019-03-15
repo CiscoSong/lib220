@@ -8,3 +8,4 @@ r.open("GET", `https://gist.githubusercontent.com/
 		06fda1c089f2c264cbdd71b908828ec4cc146a97/lib220.d.ts`);
 r.addEventListener('load', function(){monaco.languages.typescript.javascriptDefaults.addExtraLib(this.responseText);});
 r.send();
+document.querySelector(".Index-jumboContent-3 div.Pane.vertical.Pane1").style.width="80%";
